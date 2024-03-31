@@ -1,0 +1,77 @@
+<snippet>
+	<content><![CDATA[
+ll seg[4*N+8];
+ll lazy[4*N+8];
+
+ll left(ll nd) {return nd << 1;}
+ll right(ll nd) {return (nd << 1) + 1;}
+ll combine(ll a, ll b) {
+    return min(a,b);
+}
+ 
+void push_down(ll node, ll st, ll en, ll val){
+    seg[node] += val;
+    if(st != en){
+        lazy[left(node)] += val;
+        lazy[right(node)] += val;
+    }
+    lazy[node] = 0;
+}
+ 
+void build(ll node, ll st, ll en) {
+    if (st == en) {
+        seg[node] = p[st];
+        return;
+    }
+ 
+    ll mid = (st + en) / 2;
+    build(left(node), st, mid);
+    build(right(node), mid + 1, en);
+    seg[node] = combine(seg[left(node)], seg[right(node)]);
+}
+ 
+void update(ll node, ll st, ll en, ll l, ll r, ll val){
+    //not up to date
+    if(lazy[node] != 0) 
+        push_down(node, st, en, lazy[node]);
+    //full-overlap
+    if (l <= st && en <= r) {
+        push_down(node, st, en, val);
+        return;
+    }
+    //no-overlap
+    if (st > r || en < l)
+        return;
+ 
+    //partial-overlap
+    ll mid = (st + en) / 2;
+    update(left(node), st, mid, l, r, val);
+    update(right(node), mid+1, en, l, r, val);
+    seg[node] = combine(seg[left(node)], seg[right(node)]);
+}
+ 
+ 
+ll query(ll node, ll st, ll en, ll l, ll r) {
+    //not up to date
+    if(lazy[node] != 0) 
+        push_down(node, st, en, lazy[node]);
+    //full-overlap
+    if (l <= st && en <= r) 
+        return seg[node];
+    //no-overlap
+    if (st > r || en < l) 
+        return INF;
+ 
+    //partial-overlap
+    ll mid = (st + en) / 2;
+    ll lq = query(left(node), st, mid, l, r);
+    ll rq = query(right(node), mid + 1, en, l, r);
+    
+    return seg[node] = combine(lq, rq);
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>seglazy</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

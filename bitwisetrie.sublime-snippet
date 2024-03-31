@@ -1,0 +1,51 @@
+<snippet>
+	<content><![CDATA[
+template <int N>
+struct bitwise_trie {
+	struct node {
+		int sz = 0;
+		std::array<int, 2> next;
+		node() {
+			next.fill(-1);
+		}
+	};
+
+	std::vector<node> t;
+
+	bitwise_trie() : t(1) {}
+
+	void insert(const bitset<N> &b) {
+		int cur = 0;
+		for (int i = N - 1; i >= 0; i--) {
+			if (t[cur].next[b[i]] == -1) {
+				t[cur].next[b[i]] = (int)t.size();
+				t.emplace_back();
+			}
+			cur = t[cur].next[b[i]];
+		}
+		t[cur].sz += 1;
+	}
+
+	void process() {
+		auto dfs = [&](int x, const auto &self) -> void {
+			if (t[x].next[0] != -1) {
+				self(t[x].next[0], self);
+				t[x].sz += t[t[x].next[0]].sz;
+			}
+			if (t[x].next[1] != -1) {
+				self(t[x].next[1], self);
+				t[x].sz += t[t[x].next[1]].sz;
+			}
+		};
+		dfs(0, dfs);
+	}
+
+	node &operator[](int i) {
+		return t[i];
+	}
+};]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	 <tabTrigger>bitwiseTrie</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

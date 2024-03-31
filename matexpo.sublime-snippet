@@ -1,0 +1,80 @@
+<snippet>
+	<content><![CDATA[
+struct matrix{
+	ll n,m;
+	vector<vll> mat;
+	matrix(){
+		n=m=0;
+	}
+	matrix(vector<vll> in){
+		n=in.size();
+		m=in[0].size();
+		mat=vector<vll>(n+1,vll(m+1,0));
+		foo(i,1,n){
+			foo(j,1,m){
+				mat[i][j]=in[i-1][j-1];
+			}
+		}
+	}
+	matrix(ll ni, ll mi){
+		n=ni; m=mi;
+		mat=vector<vll>(ni+1,vll(mi+1,0));
+	}
+
+	void init(vector<vll> in){
+		n=in.size();
+		m=in[0].size();
+		mat=vector<vll>(n+1,vll(m+1,0));
+		foo(i,1,n){
+			foo(j,1,m){
+				mat[i][j]=in[i-1][j-1];
+			}
+		}
+	}
+
+	void print(){
+		foo(i,1,n){
+			foo(j,1,m){
+				cout<<mat[i][j]<<" ";
+			}
+			newl;
+		}
+	}
+
+	void set_identity(){
+		foo(i,1,n) mat[i][i]=1;
+	}
+};
+matrix M,base;
+
+matrix matrix_multiplication(matrix A, matrix B){
+	matrix C(A.n,B.m);
+
+	foo(i,1,A.n) foo(j,1,B.m) foo(k,1,B.n)
+		C.mat[i][j]=(C.mat[i][j]+(A.mat[i][k]*B.mat[k][j])%MOD)%MOD;
+
+	return C;
+}
+
+
+matrix fast_matrix_pow(matrix x, ll y, ll MOD=MOD){
+	matrix res(x.n,x.m);
+	res.set_identity();
+	while(y){
+		if(y&1)res=matrix_multiplication(res,x);
+		y>>=1;x=matrix_multiplication(x,x);
+	}
+	return res;
+}
+
+ll solve(matrix base, matrix M, ll n){
+	matrix res=matrix_multiplication(base,fast_matrix_pow(M,n-1));
+	return res.mat[1][res.m];
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>matexpo</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

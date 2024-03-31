@@ -1,0 +1,29 @@
+<snippet>
+	<content><![CDATA[
+ll base_to_dec(string s, ll base){
+	reverse(all(s));
+	ll n = s.size(), res = 0;
+	foo(i,0,n-1){
+		if(s[i]>='A'&& s[i]<='Z') res += (s[i]-'A'+10) * pow(base, i);
+		else res += (s[i]-'0') * pow(base, i);
+	}
+	return res;
+}
+
+string dec_to_base(ll num, ll base){
+	string res = "";
+	while(num>0){
+		res += (num%base)+'0';
+		num /= base;
+	}
+	reverse(all(res));
+	res = string(n-res.size(),'0') + res;
+	res = '#'+res+'#';
+	return res;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>baseconv</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

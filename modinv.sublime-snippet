@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+ll mod_inverse(ll x, ll MOD=MOD){
+	return fast_pow(x,MOD-2,MOD);
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>modinv</tabTrigger> 
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

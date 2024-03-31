@@ -1,0 +1,20 @@
+<snippet>
+	<content><![CDATA[
+ll fen[N];//1-indexed
+ll query(ll x){
+	ll res=0;
+	for(++x; x>=1; x -= x & -x)
+		res+=fen[x];
+	return res;
+}
+
+void update(ll x, ll val){
+	for(++x; x<=N; x += x & -x)
+		fen[x]+=val;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>fenwick</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

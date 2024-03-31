@@ -1,0 +1,17 @@
+<snippet>
+	<content><![CDATA[
+
+void prefix_sum(int ps[], int a[], int n){
+    ps[0]=a[0];
+    for (int i=0; i<n ; i++){
+        ps[i]=ps[i-1]+a[i];
+    }
+
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>prefix</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

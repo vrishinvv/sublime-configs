@@ -1,0 +1,58 @@
+<snippet>
+	<content><![CDATA[
+ll arr[N];
+ll seg[4*N + 8];
+
+ll left(ll nd) {return nd<<1;}
+ll right(ll nd) {return (nd<<1) + 1;}
+
+ll combine(ll a, ll b){
+    return a+b;
+}
+
+void build(ll node, ll st, ll en) {
+    if (st == en) {
+        seg[node] = arr[st];
+        return;
+    }
+
+    ll mid = (st + en) / 2;
+    build(left(node), st, mid);
+    build(right(node), mid + 1, en);
+    seg[node] = combine(seg[left(node)], seg[right(node)]);
+
+}
+
+void update(ll node, ll st, ll en, ll pos, ll val){
+    if(st==en){
+        seg[node]=val;
+        return;
+    }
+    ll mid = (st + en) / 2;
+    if (pos<=mid) update(left(node), st, mid, pos, val);
+    else update(right(node), mid+1, en, pos, val);
+    seg[node] = combine(seg[left(node)], seg[right(node)]);
+}
+
+ll query(ll node, ll st, ll en, ll l, ll r) {
+    if (l <= st && en <= r) return seg[node];
+    if (st > r || en < l) return 0;
+
+    ll mid = (st + en) / 2;
+    ll lq = query(left(node), st, mid, l, r);
+    ll rq = query(right(node), mid + 1, en, l, r);
+    
+    if (lq.val == 0) return rq;
+    else if (rq.val == 0) return lq;
+    else return combine(lq, rq);
+}
+
+
+
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>seg1</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

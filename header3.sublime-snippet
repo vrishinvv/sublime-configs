@@ -1,0 +1,53 @@
+<snippet>
+    <content><![CDATA[
+#pragma optimization_level 3
+#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx")
+#include <bits/stdc++.h>
+#define  f               first
+#define  s               second
+#define  sym(s)          s = "#" + s + "#";
+#define  all(x)          (x).begin(), (x).end()
+#define  alll(x,n)       x+1, x+n+1
+#define  newl            cout<<"\n";
+#define  foo(i,a,n)      for(ll i = (a); i <= n; i++)
+#define  deb1(a)         cout<<a<<"\n";
+#define  deb2(a,b)       cout<<a<<" "<<b<<"\n";
+#define  deb3(a,b,c)     cout<<a<<" "<<b<<" "<<c<<"\n";
+#define  deb4(a,b,c,d)   cout<<a<<" "<<b<<" "<<c<<" "<<d<<"\n";
+#define  debp(a)         cout<<a.f<<" "<<a.s<<"\n";
+#define  debv(a)         for(auto it: a)cout<<it<<" ";newl;
+#define  debm(a)         for(auto it: a)cout<<"{"<<it.f<<","<<it.s<<"}, ";newl;
+#define  deb1d(a,n)      foo(i,1,n)cout<<a[i]<<" ";newl;
+#define  deb2d(a,n,m)    foo(i,1,n){foo(j,1,m){cout<<a[i][j]<<" ";}newl;}
+
+using namespace std;
+using ll              =  long long;
+using ld              =  long double;
+const ll   MOD        =  1e+9 + 7;
+const ll   INF        =  LLONG_MAX;
+const int  N          =  (int)2e+5 + 8;
+
+$2
+
+void MAIN(int tc){
+    $3
+}
+
+int main(){
+    ios:: sync_with_stdio(false); 
+    cin.tie(nullptr); cout.tie(nullptr);
+    cout<<fixed; cout<<setprecision(10);
+
+    int test_cases = 1;
+    //$1cin>>test_cases;
+    for(int i = 1; i <= test_cases; i++){
+        MAIN(i);
+    }
+}
+]]></content>
+    <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+    <tabTrigger>header3</tabTrigger>
+    <!-- Optional: Set a scope to limit where the snippet will trigger -->
+    <!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,76 @@
+<snippet>
+	<content><![CDATA[
+
+
+struct TrieNode { 
+    struct TrieNode* children[26]; 
+    bool isEndOfWord; 
+}; 
+  
+struct TrieNode* getNode() { 
+    struct TrieNode* pNode = new TrieNode; 
+    pNode->isEndOfWord = false; 
+    fo(i,26) pNode->children[i] = NULL; 
+    return pNode; 
+} 
+
+void insert(struct TrieNode* root, string key){ 
+    struct TrieNode* pCrawl = root; 
+    fo(i,key.length()){
+        ll index = key[i]-'a'; 
+        if(!pCrawl->children[index]) pCrawl->children[index] = getNode(); 
+        pCrawl = pCrawl->children[index]; 
+    } 
+    pCrawl->isEndOfWord = true; 
+} 
+  
+bool search(struct TrieNode* root, string key){ 
+    struct TrieNode* pCrawl = root; 
+    fo(i,key.length()){
+        ll index = key[i]-'a'; 
+        if (!pCrawl->children[index]) return false; 
+        pCrawl = pCrawl->children[index]; 
+    } 
+    return (pCrawl != NULL && pCrawl->isEndOfWord); 
+} 
+
+bool isEmpty(TrieNode* root) { 
+    fo(i,26){if(root->children[i]) return false;} 
+    return true; 
+} 
+  
+TrieNode* remove(TrieNode* root, string key, ll depth = 0){ 
+    if(!root) return NULL; // If tree is empty 
+  
+    if(depth==key.size()) {  // If last character of key is being processed 
+
+        if(root->isEndOfWord) root->isEndOfWord=false; // This node is no more end of word after removal of given key 
+        
+        if(isEmpty(root)) {  // If given is not prefix of any other word 
+            delete(root); 
+            root=NULL; 
+        } 
+        return root; 
+    } 
+  
+    ll index=key[depth]-'a'; 
+    root->children[index]=remove(root->children[index], key, depth + 1); 
+  
+    // If root does not have any child (its only child got deleted), and it is not end of another word. 
+    if(isEmpty(root) && root->isEndOfWord==false) { 
+         delete (root); 
+         root = NULL; 
+     } 
+  
+    return root; 
+} 
+
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>triee</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
+
+

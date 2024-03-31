@@ -1,0 +1,76 @@
+<snippet>
+	<content><![CDATA[
+template<typename T>
+struct Mohs {
+    struct Query {
+        int idx, l, r, lb, rb;
+    };
+
+    int n, m;
+    int block_size;
+    T cur;
+    vector<T> a, ans;
+    vector<Query> q;
+    vector<int> cnt, used;
+
+    function<bool(Query &a, Query &b)> F1 = [&](Query a, Query b) {
+        return (a.lb < b.lb) || (a.lb == b.lb && a.r < b.r);
+    };
+    function<bool(Query &a, Query &b)> F2 = [&](Query a, Query b) {
+        return (a.lb < b.lb) || (a.lb == b.lb && (a.lb & 1 ? a.r < b.r : a.r > b.r));
+    };
+
+    template<typename U>
+    Mohs(int n, int m, const U &arr): n(n), m(m), a(1), q(1), cur(0) {
+        a.reserve(n + 1);
+        q.reserve(m + 1);
+        ans.resize(m + 1);
+        cnt.resize(1e6 + 1);
+        used.resize(n + 1);
+        for (int i = 1; i <= n; i++) {
+            a.push_back(T(arr[i]));
+        }
+        block_size = pow(n, 0.5);
+    }
+
+    void addQuery(int i, int l, int r) {
+        q.push_back({i, l, r, l / block_size + 1, r / block_size + 1});
+    }
+
+    void add_element(int i) {
+        if (++cnt[a[i]] == 1 && used[i] == 0) cur++;
+        used[i] = 1;
+    }
+
+    void rem_element(int i) {
+        if(!used[i]) return;
+        if (--cnt[a[i]] == 0) cur--;
+        used[i] = 0;
+    }
+
+    void solve() {
+        sort(all(q), F2);
+        int L = 1, R = 0;
+        for (int i = 1; i <= m; i++) {
+            int qL = q[i].l, qR = q[i].r, idx = q[i].idx;
+            while (R < qR) add_element(++R);
+            while (L > qL) add_element(--L);
+            while (R > qR) rem_element(R--);
+            while (L < qL) rem_element(L++);
+            ans[idx] = cur;
+        }
+        print();
+    }
+
+    void print() {
+        for (int i = 1; i <= m; i++) {
+            cout << ans[i] << "\n";
+        }
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>MohsWOU</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

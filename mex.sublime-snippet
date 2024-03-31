@@ -1,0 +1,29 @@
+<snippet>
+	<content><![CDATA[
+set<ll>mex;
+map<ll,ll> f;
+void create(){
+    foo(i,0,N-1) mex.insert(i);
+    foo(i,1,n) {
+    	mex.erase(a[i]);
+    	f[a[i]]++;
+    }
+}
+
+void add(ll i, ll v){
+	f[a[i]]--;
+	if(f[a[i]]==0) {
+        f.erase(a[i]);
+        mex.insert(a[i]);
+    }
+	a[i]=v;
+	f[a[i]]++;
+	mex.erase(a[i]);
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>mex_next</tabTrigger> 
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

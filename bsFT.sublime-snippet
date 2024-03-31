@@ -1,0 +1,35 @@
+<snippet>
+	<content><![CDATA[
+
+int bs(int lo, int hi, int a[]){
+    int mid=0;
+
+    while(lo<hi){
+
+        mid = floor((lo+hi)/2);
+    
+        if (process(mid, a, n)){        //Fucntion returns True
+            lo=mid+1;
+        }
+        else{
+            hi=mid;
+        }
+
+    }
+
+    return lo;
+}
+
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>bsFFTT</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
+
+
+
+
+
+

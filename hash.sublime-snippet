@@ -1,0 +1,54 @@
+<snippet>
+	<content><![CDATA[
+ll base = 1e9+7;
+const ll hMOD = 1e9+123;
+ll pow1[N]; 
+ull pow2[N]; 
+ll pre1[N]; 
+ull pre2[N];
+
+int gen_base(const int before, const int after) {
+    auto seed = chrono::high_resolution_clock::now().time_since_epoch().count();
+    mt19937 mt_rand(seed);
+    int base = uniform_int_distribution<int>(before+1, after)(mt_rand);
+    return base % 2 == 0 ? base-1 : base;
+}
+
+void init_base(){
+    pw1[0] = pw2[0] = 1;
+    for(int i=1; i<N; i++) {
+        pw1[i] = pw1[i-1] * base % hMOD;
+        pw2[i] = pw2[i-1] * base;
+    }
+}
+
+struct DoubleHash {
+    DoubleHash(){}
+    DoubleHash(const string& s){make(s);}
+
+    void make(string s){
+        int n = s.size();
+        pre1[0] = pre2[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            pre1[i] = (pre1[i-1] + s[i] * pw1[i-1]) % hMOD;
+            pre2[i] = pre2[i-1] + s[i] * pw2[i-1];
+        }
+    }
+
+    inline pair<ll, ull> operator()(const int pos, const int len) const{
+        int l = pos; int r = pos + len - 1;
+        ll h1 = pre1[r] - pre1[l-1];
+        ull h2 = pre2[r] - pre2[l-1];
+        if (h1 < 0) h1 += hMOD;
+        h1 = h1 * pw1[N-r] % hMOD;
+        h2 *= pw2[N-r];  
+        return {h1, h2};
+    }
+};
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>doublehash</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

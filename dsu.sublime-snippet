@@ -1,0 +1,28 @@
+<snippet>
+	<content><![CDATA[
+ll par[N], sz[N]; 
+void make() {
+    foo(v,1,N-1)
+        par[v]=v, sz[v]=1;
+} 
+ 
+ll find(ll v) {
+    return  (v == par[v])? v: par[v] = find(par[v]);
+}
+ 
+void merge(ll x, ll y) {
+    ll a = find(x); 
+    ll b = find(y);
+    if (a != b) {
+        if (sz[a] < sz[b]) 
+            swap(a, b);
+        par[b] = a;
+        sz[a] += sz[b];
+    }
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>dsu</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

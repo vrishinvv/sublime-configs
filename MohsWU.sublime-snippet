@@ -1,0 +1,124 @@
+<snippet>
+	<content><![CDATA[
+template<typename T>
+struct Mohs {
+    struct Query {
+        int idx, l, r, k, lb, rb;
+    };
+    struct Update {
+        int idx;
+        T new_val, prv_val;
+    };
+
+    int n, m;
+    int block_size;
+    T cur;
+    vector<T> a, ans;
+    vector<Update> u;
+    vector<Query> q;
+    vector<int> cnt, used;
+    map<int, int> mp;
+    vector<int> rev;
+
+    function<bool(Query &a, Query &b)> F = [&](Query a, Query b) {
+        return (a.lb < b.lb) || (a.lb == b.lb && a.rb < b.rb) || (a.lb == b.lb && a.rb == b.rb && a.k < b.k);
+    };
+
+    template<typename U>
+    Mohs(int n, int m, const U &arr): n(n), m(m), a(1), q(1), u(1), cur(0) {
+        a.reserve(n + 1);    
+        ans.resize(m + 1);
+        used.resize(n + 1);
+        for (int i = 1; i <= n; i++) {
+            a.push_back(T(arr[i]));
+        }
+        block_size = pow(n, 2.0/3.0);
+    }
+
+    void add_element(int i) {
+        if (++cnt[a[i]] == 1 && used[i] == 0) cur += rev[a[i]];
+        used[i] = 1;
+    }
+
+    void rem_element(int i) {
+        if(!used[i]) return;
+        if (--cnt[a[i]] == 0) cur -= rev[a[i]];
+        used[i] = 0;
+    }
+
+    void reflect_update(int i, T val){
+        if(!used[i]){
+            a[i] = val;
+            return;
+        }
+        rem_element(i);
+        a[i] = val;
+        add_element(i);
+    }
+
+    void do_update(int i){
+        reflect_update(u[i].idx, u[i].new_val);
+    }
+    void undo_update(int i){
+        reflect_update(u[i].idx, u[i].prv_val);
+    }
+
+    void add_query(int i, int l, int r, int k) {
+        q.push_back({i, l, r, k, l / block_size + 1, r / block_size + 1});        
+    }
+
+    void add_update(int i, T val, T prev_val) {
+        u.push_back({i, val, prev_val});        
+    }
+
+    void solve() {
+        sort(all(q), F);
+        for(int i = 1; i <= n; i++){
+            mp[a[i]];
+        }
+        for(int i = 1; i <= u.size() - 1; i++){
+            mp[u[i].new_val];
+        }
+        rev.resize(int(mp.size()) + 1);
+        cnt.resize(int(mp.size()) + 1);
+        int cnt = 0;
+        for(auto &it: mp){
+            cnt++;
+            it.s = cnt;
+            rev[cnt] = it.f;
+        }
+
+        for(int i = 1; i <= n; i++){
+            a[i] = mp[a[i]];
+        }
+        for(int i = 1; i <= u.size() - 1; i++){
+            u[i].prv_val = mp[u[i].prv_val];
+            u[i].new_val = mp[u[i].new_val];
+        }
+        
+        int L = 1, R = 0, K = 0;
+        for (int i = 1; i <= q.size() - 1; i++) {
+            int qL = q[i].l, qR = q[i].r, idx = q[i].idx, qK = q[i].k;
+            while (K < qK) do_update(++K);
+            while (K > qK) undo_update(K--);
+            while (R < qR) add_element(++R);
+            while (L > qL) add_element(--L);
+            while (R > qR) rem_element(R--);
+            while (L < qL) rem_element(L++);
+            ans[idx] = cur;
+        }
+        print();
+    }
+
+    void print() {
+        for (int i = 1; i <= q.size() - 1; i++) {
+            cout << ans[i] << "\n";
+        }
+    }
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>MohsWU</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

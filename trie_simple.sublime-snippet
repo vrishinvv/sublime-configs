@@ -1,0 +1,32 @@
+<snippet>
+	<content><![CDATA[
+ll nxt[V][2];
+ll cnt[V];
+char ch = '0';
+ll tsz=1;
+void add(string s) {
+    ll n = s.size(); sym(s);
+
+    ll v = 1;
+    cnt[v]++;
+    for (ll i = 1; i <= n; i++) {
+        ll c = s[i] - ch;
+        if (nxt[v][c] == 0) {
+            nxt[v][c] = ++tsz;
+        }
+        v = nxt[v][c];
+        cnt[v]++;
+    }
+    //v=1, is the root, from where you decide where to go -> 0 or -> 1
+    //v=1, doesnt really mean any value, you can think of it as "#", that you use before a string
+    //from a particular v, you can decide to go to any of its children
+    //if a partilcuar v, has no children, then its entire array will be 0 (no ptrs to children)
+  	//cnt[v] counts the no of leaves of every subtree rooted at v
+
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>trie_simple</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

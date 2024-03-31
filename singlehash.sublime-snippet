@@ -1,0 +1,39 @@
+<snippet>
+	<content><![CDATA[
+ll base = 1e9+7;
+ull pw2[N]; 
+void init_base(){
+    pw2[0] = 1;
+    for(int i=1; i<N; i++) {
+        pw2[i] = pw2[i-1] * base;
+    }
+}
+
+struct SingleHash {
+    vector<ull> pre2;
+
+    SingleHash(){}
+    SingleHash(const string& s){make(s);}
+    
+    void make(string s = ""){
+        int n = s.size();
+        pre2 = vector<ull>(n+5u, 0);
+        for (int i = 1; i <= n; i++) {
+            pre2[i] = pre2[i-1] + s[i] * pw2[i-1];
+        }
+    }
+
+    inline ull operator()(const int pos, const int len) const{
+        int l = pos; int r = pos + len - 1;
+        ull h2 = pre2[r] - pre2[l-1];
+        h2 *= pw2[N-r];
+        return h2;
+    }
+};
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>singlehash</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

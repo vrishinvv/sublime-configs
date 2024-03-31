@@ -1,0 +1,153 @@
+<snippet>
+	<content><![CDATA[
+class Trie {
+private:
+    char st; int sz;
+    vector<vector<int>> nxt;
+    vector<int> cnt, noc;
+    deque<int> q;
+    deque<char> pm;
+
+public:
+    // v = 1, is the root, from where you decide where to go -> 0 or -> 1
+    // v = 1, doesnt really mean any value, you can think of it as "#", that you use before a string
+    // from a particular v, you can decide to go to any of its children
+    // if a partilcuar v, has no children, then its entire array will be 0 (no ptrs to children)
+    // cnt[v] counts the no of leaves of every subtree rooted at v
+
+    // c -> start of alpahabet, x -> size of alphabet
+    Trie(char c, int x) {
+        st = c; sz = x;
+        nxt  = vector<vector<int>>(N, vector<int>(x + 1, 0));
+        cnt = noc = vector<int>(N, 0);
+        for (int i = 2; i < N; i++) {
+            q.push_back(i);
+        }
+    }
+
+    ll get_new_node() {
+        ll v = q.front();
+        q.pop_front();
+        return v;
+    }
+
+    void insert(string s) {
+        int n = s.size(); sym(s);
+
+        int v = 1;
+        for (int i = 1; i <= n; i++) {
+            int c = s[i] - st;
+            if (nxt[v][c] == 0) {
+                nxt[v][c] = get_new_node();
+                noc[v]++;
+            }
+            v = nxt[v][c];
+        }
+        cnt[v]++;
+    }
+
+    int rem(string &s, int &n, int d, int v) {
+        if (d == n + 1) {
+            if (cnt[v] == 0) return 0;
+            cnt[v]--;
+            if (cnt[v] == 0 && noc[v] == 0) {
+                q.push_back(v);
+                return 2;
+            }
+            return 1;
+        }
+
+        int c = s[d] - st;
+        if (nxt[v][c] == 0) return 0;
+
+        //0-word not found, 1- child node was not deleted, 2 - child node was deleted
+        int m = rem(s, n, d + 1, nxt[v][c]);
+        if (m == 2) {
+            nxt[v][c] = 0;
+            noc[v]--;
+            if (cnt[v] == 0 && noc[v] == 0) {
+                q.push_back(v);
+                return 2;
+            }
+            return 1;
+        } else {
+            // 0 or 1
+            return m;
+        }
+    }
+
+    int erase(string s) {
+        int n = s.size(); sym(s);
+        return rem(s, n, 1, 1);
+    }
+
+    ll search(string s) {
+        ll n = s.size(); sym(s);
+
+        ll v = 1;
+        for (ll i = 1; i <= n; i++) {
+            char c = s[i] - st;
+            if (nxt[v][c] == 0) return 0;
+            v = nxt[v][c];
+        }
+        return cnt[v] > 0;
+    }
+
+    void dfs(ll v) {
+        if (cnt[v] > 0) {
+            for (auto it : pm)cout << it;
+            newl;
+        }
+        for (ll i = 1; i <= sz; i++ ) {
+            if (nxt[v][i] != 0) {
+                pm.push_back(i + 'a' - 1);
+                dfs(nxt[v][i]);
+                pm.pop_back();
+            }
+        }
+    }
+
+    void pref_search(string s) {
+        ll n = s.size(); sym(s);
+        ll v = 1;
+        for (ll i = 1; i <= n; i++) {
+            char c = s[i] - st;
+            if (nxt[v][c] == 0) {
+                cout << "Prefix doesnt exist!\n";
+                return;
+            }
+            pm.push_back(s[i]);
+            v = nxt[v][c];
+        }
+
+        //prefix exists, time to dfs
+        dfs(v);
+        pm.clear();
+    }
+
+    int solve(string s) {
+        int res = 0;
+        int n = s.size(); sym(s);
+
+        int v = 1;
+        for (int i = 1; i <= n; i++) {
+            int c = s[i] - st;
+            if (nxt[v][c ^ 1] != 0) {
+                v = nxt[v][c ^ 1];
+                res += pow(2, n - i);
+            } else if (nxt[v][c] != 0) {
+                v = nxt[v][c];
+            } else {
+                break;
+            }
+        }
+        return res;
+    }
+};
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>triee1</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
